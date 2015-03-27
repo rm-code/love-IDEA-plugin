@@ -11,6 +11,7 @@ function getLastModified() end
 function getRealDirectory() end
 function getSaveDirectory() end
 function getSize() end
+function getSourceBaseDirectory() end
 function getUserDirectory() end
 function getWorkingDirectory() end
 function isDirectory() end
@@ -19,10 +20,13 @@ function isFused() end
 function isSymlink() end
 function lines() end
 function load() end
+function mount() end
 function newFile() end
 function newFileData() end
 function read() end
 function remove() end
 function setIdentity() end
+function setSource() end
 function setSymlinksEnabled() end
+function unmount() end
 function write() end
