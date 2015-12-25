@@ -6,16 +6,15 @@ A [LÖVE](http://love2d.org)-Plugin for [IntelliJ IDEA](http://www.jetbrains.com
 This plugin enables auto-complete functionality for functions of the LÖVE-framework while using [Lua for IntelliJ Idea](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Home).
 
 The repository contains different folders for the following LÖVE versions:
-- [0.9.1](https://love2d.org/wiki/0.9.1)
+- [0.10.0](https://love2d.org/wiki/0.10.0)
 - [0.9.2](https://love2d.org/wiki/0.9.2)
-
+- [0.9.1](https://love2d.org/wiki/0.9.1)
 
 ##Prerequisites
 
 - [IntelliJ IDEA](http://www.jetbrains.com/idea/)
 - [Lua Plugin for IntelliJ Idea](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Home)
 - This Plugin
-
 
 ## Installing the Plugin
 
