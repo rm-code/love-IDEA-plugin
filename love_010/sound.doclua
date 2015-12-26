@@ -1,0 +1,61 @@
+local BASE_URL = "https://love2d.org"
+
+--- Quickhelp Documentation (ctrl-J)
+-- This is called when the user invokes quick help via ctrl-j, or by
+-- having the quickhelp panel open and set to autolookup
+-- @param name The name to get documentation for.
+-- @return the documentation as an HTML or plain text string
+function getDocumentation(name)
+    -- Use for development
+    -- disableCache()
+
+    local data = fetchURL(getDocumentationUrl(name))
+
+    local contentTag = [[<div id="bodyContent">]]
+    local footerTag = [[<div class="printfooter]]
+
+    local contentPos = data:find(contentTag)
+    local footerPos = data:find(footerTag)
+
+    if contentPos == nil then
+        return "<html><h3>" .. name .. "</h3>Could not load from Love wiki.<br><br><b>[data from love2d.org]</b></html>"
+    end
+
+    data = data:sub(contentPos, footerPos)
+
+    data =  data:gsub([[href="]], [[href="]]..BASE_URL)
+    data =  data:gsub([[src="]], [[src="]]..BASE_URL)
+
+    data = "<html><h3>" .. name .. "</h3>" .. data .. "<br><br><b>[data from love2d.org]</b></html>"
+
+    return data
+end
+
+--- External Documentation URL (shift-F1)
+-- This is called by shift-F1 on the symbol, or by the
+-- external documentation button on the quick help panel
+-- @param name The name to get documentation for.
+-- @return the URL of the external documentation
+function getDocumentationUrl(name)
+    return BASE_URL .. "/wiki/" .. name
+end
+
+
+--- Quick Navigation Tooltip Text, (ctrl-hover on symbol)
+-- This is called when the user ctrl-hovers over a symbol
+-- @param name The name to get documentation for.
+-- @return the documentation as a plain text string
+function getQuickNavigateDocumentation(name)
+    local sig = SIGNATURES[name]
+    if not sig then return name end
+    return SIGNATURES[name]
+end
+
+
+SIGNATURES = {
+["love.sound"] = [=[love.sound - This module is responsible for decoding sound files. It can't play the sounds, see love.audio for that.]=],
+["love.sound.newDecoder"] = [=[newDecoder(file, buffer) - Attempts to find a decoder for the encoded sound data in the specified file.]=],
+["love.sound.newSoundData"] = [=[newSoundData(filename) - Creates new SoundData from a file. It's also possible to create SoundData with a custom sample rate, channel and bit depth.
+
+The sound data will be decoded to the memory in a raw format. It is recommended to create only short sounds like effects, as a 3 minute song uses 30 MB of memory this way.]=],
+}
