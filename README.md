@@ -1,6 +1,8 @@
 # love-IDEA-plugin
 A [LÖVE](http://love2d.org)-Plugin for [IntelliJ IDEA](http://www.jetbrains.com/idea/).
 
+![example](https://raw.githubusercontent.com/rm-code/love-IDEA-plugin/master/screenshots/preview.png)
+
 -----------
 
 This plugin enables auto-complete functionality for functions of the LÖVE-framework while using [Lua for IntelliJ Idea](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Home).
