@@ -21,15 +21,14 @@ The repository contains different folders for the following LÖVE versions:
 ## Installing the Plugin
 
 1. Open a Project in IntelliJ IDEA
-2. Search for the __External Libraries__ Item in the Project View and extend it
-3. Right click on the Lua SDK your project uses
-4. Select __Open Library Settings__
-5. In the new window look for a __+__ button on the right side
+2. Open _File_ > _Project Structure_
+3. Select _Libraries_ (under Project Settings) or _Global Libraries_ (under Platform Settings)
+4. Click on the __+__-button
+5. Select _New Lua Library_
 6. From the menu select the path where this Plugin can be found on your computer and press __OK__
-7. The __Classpath__-Tab should now contain a new item showing the path to the Plugin
-8. Select __Apply__ and __OK__
+7. Select __Apply__ and __OK__
 
-[Additional Instructions](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Installing_a_Custom_API)
+If you run into problems you can find additional instructions [here](https://www.jetbrains.com/idea/help/configuring-module-dependencies-and-libraries.html) and [here](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Installing_a_Custom_API).
 
 ## License
 
