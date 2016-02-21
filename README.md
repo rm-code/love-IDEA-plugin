@@ -28,7 +28,7 @@ The repository contains different folders for the following LÖVE versions:
 3. Select __Libraries__ (under Project Settings) or __Global Libraries__ (under Platform Settings)
 4. Click on the __+__-button
 5. Select __New Lua Library__
-6. From the menu select the path where this Plugin can be found on your computer and press __OK__
+6. From the menu select the appropriate path to the doc files for your LÖVE version (e.g. love_0101 for LÖVE 0.10.1) and press __OK__
 7. Select __Apply__ and __OK__
 
 If you run into problems you can find additional instructions [here](https://www.jetbrains.com/idea/help/configuring-module-dependencies-and-libraries.html) and [here](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Installing_a_Custom_API).
