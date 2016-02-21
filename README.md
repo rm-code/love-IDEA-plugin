@@ -24,10 +24,10 @@ The repository contains different folders for the following LÖVE versions:
 ## Installing the Plugin
 
 1. Open a Project in IntelliJ IDEA
-2. Open _File_ > _Project Structure_
-3. Select _Libraries_ (under Project Settings) or _Global Libraries_ (under Platform Settings)
+2. Open __File__ > __Project Structure__
+3. Select __Libraries__ (under Project Settings) or __Global Libraries__ (under Platform Settings)
 4. Click on the __+__-button
-5. Select _New Lua Library_
+5. Select __New Lua Library__
 6. From the menu select the path where this Plugin can be found on your computer and press __OK__
 7. Select __Apply__ and __OK__
 
