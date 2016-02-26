@@ -5,7 +5,12 @@ A [LÖVE](http://love2d.org)-Plugin for [IntelliJ IDEA](http://www.jetbrains.com
 
 -----------
 
-This plugin enables auto-complete functionality for functions of the LÖVE-framework while using [Lua for IntelliJ Idea](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Home).
+This plugin enables auto-complete functionality and quick documentation for functions of the LÖVE-framework while using [Lua for IntelliJ Idea](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Home).
+
+## Features
+
+- Smart code completion: Start typing and IntelliJ will show you suggestions based on the LÖVE API
+- Bring up the quick documentation of a function by hovering over it while pressing CTRL
 
 ## LÖVE versions
 
