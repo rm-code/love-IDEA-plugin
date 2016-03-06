@@ -96,4 +96,5 @@ The candidate text is not the final text that the user will eventually choose. U
 ["love.visible"] = [=[visible(visible) - Callback function triggered when window is minimized/hidden or unminimized by the user.]=],
 ["love.wheelmoved"] = [=[wheelmoved(x, y) - Callback function triggered when the mouse wheel is moved.]=],
 ["love.getVersion"] = [=[getVersion() - Gets the current running version of LÖVE.]=],
+["love.conf"] = [=[conf(t) - If a file called conf.lua is present in your game folder (or .love file), it is run before the LÖVE modules are loaded. You can use this file to overwrite the love.conf function, which is later called by the LÖVE 'boot' script. Using the love.conf function, you can set some configuration options, and change things like the default size of the window, which modules are loaded, and other stuff.]=],
 }

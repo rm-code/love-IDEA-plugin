@@ -34,3 +34,4 @@ function update() end
 function visible() end
 function wheelmoved() end
 function getVersion() end
+function conf() end
