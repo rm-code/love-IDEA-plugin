@@ -66,7 +66,7 @@ end
 -- The LÖVE API lives at https://github.com/love2d-community/love-api
 --
 local function generate()
-    local api = require( 'love_api' )
+    local api = require( 'api.love_api' )
 
     assert( api, 'LÖVE api not found.' )
 
