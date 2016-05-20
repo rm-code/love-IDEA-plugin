@@ -75,7 +75,7 @@ In general, colors chosen based on what they look like on-screen are already in 
 
 The number of vertices in the control polygon determines the degree of the curve, e.g. three vertices define a quadratic (degree 2) Bézier curve, four vertices define a cubic (degree 3) Bézier curve, etc.]=],
 ["love.math.newRandomGenerator"] = [=[newRandomGenerator() - Creates a new RandomGenerator object which is completely independent of other RandomGenerator objects and random functions.]=],
-["love.math.noise"] = [=[noise(x) - Generates a Simplex or Perlin noise value in 1-4 dimensions.
+["love.math.noise"] = [=[noise(x) - Generates a Simplex or Perlin noise value in 1-4 dimensions. The return value will always be the same, given the same arguments.
 
 Simplex noise is closely related to Perlin noise. It is widely used for procedural content generation.
 
