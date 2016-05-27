@@ -36,7 +36,7 @@ The repository contains different folders for the following LÖVE versions:
 6. From the menu select the appropriate path to the doc files for your LÖVE version (e.g. love_0101 for LÖVE 0.10.1) and press __OK__
 7. Select __Apply__ and __OK__
 
-If you run into problems you can find additional instructions [here](https://www.jetbrains.com/idea/help/configuring-module-dependencies-and-libraries.html) and [here](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Installing_a_Custom_API).
+If you run into problems you can find additional instructions [here](https://www.jetbrains.com/idea/help/configuring-module-dependencies-and-libraries.html) and [here](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Installing_a_Custom_API). There's also a great tutorial [available on youtube](https://www.youtube.com/watch?v=pw7WU-hnU0g).
 
 ## License
 
