@@ -62,7 +62,7 @@ SIGNATURES = {
 ["love.audio.getVelocity"] = [=[getVelocity() - Returns the velocity of the listener.]=],
 ["love.audio.getVolume"] = [=[getVolume() - Returns the master volume.]=],
 ["love.audio.newSource"] = [=[newSource(filename, type) - Creates a new Source from a file or SoundData. Sources created from SoundData are always static.]=],
-["love.audio.pause"] = [=[pause() - Pauses all audio]=],
+["love.audio.pause"] = [=[pause() - Pauses currently played Sources.]=],
 ["love.audio.play"] = [=[play(source) - Plays the specified Source.]=],
 ["love.audio.resume"] = [=[resume() - Resumes all audio]=],
 ["love.audio.rewind"] = [=[rewind() - Rewinds all playing audio.]=],
@@ -72,5 +72,5 @@ SIGNATURES = {
 ["love.audio.setPosition"] = [=[setPosition(x, y, z) - Sets the position of the listener, which determines how sounds play.]=],
 ["love.audio.setVelocity"] = [=[setVelocity(x, y, z) - Sets the velocity of the listener.]=],
 ["love.audio.setVolume"] = [=[setVolume(volume) - Sets the master volume.]=],
-["love.audio.stop"] = [=[stop() - Stops all playing audio.]=],
+["love.audio.stop"] = [=[stop() - Stops currently played sources.]=],
 }
