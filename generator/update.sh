@@ -1,8 +1,9 @@
 #!/bin/bash
-readonly LOVE_DIR=love_0101
+readonly LOVE_DIR=love_0102
 
 rm -rf api
-git clone https://github.com/rm-code/love-api api
+git clone --depth=1 https://github.com/rm-code/love-api api
+mkdir docs
 lua generator.lua
-mv docs/*lua ../$LOVE_DIR
+mv docs/ ../$LOVE_DIR
 rm -rf api
