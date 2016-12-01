@@ -1,0 +1,124 @@
+local BASE_URL = "https://love2d.org"
+
+--- Quickhelp Documentation (ctrl-J)
+-- This is called when the user invokes quick help via ctrl-j, or by
+-- having the quickhelp panel open and set to autolookup
+-- @param name The name to get documentation for.
+-- @return the documentation as an HTML or plain text string
+function getDocumentation(name)
+    -- Use for development
+    -- disableCache()
+
+    local data = fetchURL(getDocumentationUrl(name))
+
+    local contentTag = [[<div id="bodyContent">]]
+    local footerTag = [[<div class="printfooter]]
+
+    local contentPos = data:find(contentTag)
+    local footerPos = data:find(footerTag)
+
+    if contentPos == nil then
+        return "<html><h3>" .. name .. "</h3>Could not load from Love wiki.<br><br><b>[data from love2d.org]</b></html>"
+    end
+
+    data = data:sub(contentPos, footerPos)
+
+    data =  data:gsub([[href="]], [[href="]]..BASE_URL)
+    data =  data:gsub([[src="]], [[src="]]..BASE_URL)
+
+    data = "<html><h3>" .. name .. "</h3>" .. data .. "<br><br><b>[data from love2d.org]</b></html>"
+
+    return data
+end
+
+--- External Documentation URL (shift-F1)
+-- This is called by shift-F1 on the symbol, or by the
+-- external documentation button on the quick help panel
+-- @param name The name to get documentation for.
+-- @return the URL of the external documentation
+function getDocumentationUrl(name)
+    return BASE_URL .. "/wiki/" .. name
+end
+
+
+--- Quick Navigation Tooltip Text, (ctrl-hover on symbol)
+-- This is called when the user ctrl-hovers over a symbol
+-- @param name The name to get documentation for.
+-- @return the documentation as a plain text string
+function getQuickNavigateDocumentation(name)
+    local sig = SIGNATURES[name]
+    if not sig then return name end
+    return SIGNATURES[name]
+end
+
+
+SIGNATURES = {
+["love.window"] = [=[love.window - Provides an interface for modifying and retrieving information about the program's window.]=],
+["love.window.close"] = [=[close() - Closes the window. It can be reopened with love.window.setMode.]=],
+["love.window.fromPixels"] = [=[fromPixels(pixelvalue) - Converts a number from pixels to density-independent units.
+
+The pixel density inside the window might be greater (or smaller) than the "size" of the window. For example on a retina screen in Mac OS X with the highdpi window flag enabled, the window may take up the same physical size as an 800x600 window, but the area inside the window uses 1600x1200 pixels. love.window.fromPixels(1600) would return 800 in that case.
+
+This function converts coordinates from pixels to the size users are expecting them to display at onscreen. love.window.toPixels does the opposite. The highdpi window flag must be enabled to use the full pixel density of a Retina screen on Mac OS X and iOS. The flag currently does nothing on Windows and Linux, and on Android it is effectively always enabled.
+
+Most LÖVE functions return values and expect arguments in terms of pixels rather than density-independent units.]=],
+["love.window.getDisplayName"] = [=[getDisplayName(displayindex) - Gets the name of a display.]=],
+["love.window.getFullscreen"] = [=[getFullscreen() - Gets whether the window is fullscreen.]=],
+["love.window.getFullscreenModes"] = [=[getFullscreenModes(display) - Gets a list of supported fullscreen modes.]=],
+["love.window.getIcon"] = [=[getIcon() - Gets the window icon.]=],
+["love.window.getMode"] = [=[getMode() - Returns the current display mode.]=],
+["love.window.getPixelScale"] = [=[getPixelScale() - Gets the DPI scale factor associated with the window.
+
+The pixel density inside the window might be greater (or smaller) than the "size" of the window. For example on a retina screen in Mac OS X with the highdpi window flag enabled, the window may take up the same physical size as an 800x600 window, but the area inside the window uses 1600x1200 pixels. love.window.getPixelScale() would return 2.0 in that case.
+
+The love.window.fromPixels and love.window.toPixels functions can also be used to convert between units.
+
+The highdpi window flag must be enabled to use the full pixel density of a Retina screen on Mac OS X and iOS. The flag currently does nothing on Windows and Linux, and on Android it is effectively always enabled.]=],
+["love.window.getPosition"] = [=[getPosition() - Gets the position of the window on the screen.
+
+The window position is in the coordinate space of the display it is currently in.]=],
+["love.window.getTitle"] = [=[getTitle() - Gets the window title.]=],
+["love.window.hasFocus"] = [=[hasFocus() - Checks if the game window has keyboard focus.]=],
+["love.window.hasMouseFocus"] = [=[hasMouseFocus() - Checks if the game window has mouse focus.]=],
+["love.window.isDisplaySleepEnabled"] = [=[isDisplaySleepEnabled() - Gets whether the display is allowed to sleep while the program is running.
+
+Display sleep is disabled by default. Some types of input (e.g. joystick button presses) might not prevent the display from sleeping, if display sleep is allowed.]=],
+["love.window.isMaximized"] = [=[isMaximized() - Gets whether the Window is currently maximized.
+
+The window can be maximized if it is not fullscreen and is resizable, and either the user has pressed the window's Maximize button or love.window.maximize has been called.]=],
+["love.window.isOpen"] = [=[isOpen() - Checks if the window is open.]=],
+["love.window.isVisible"] = [=[isVisible() - Checks if the game window is visible.
+
+The window is considered visible if it's not minimized and the program isn't hidden.]=],
+["love.window.maximize"] = [=[maximize() - Makes the window as large as possible.
+
+This function has no effect if the window isn't resizable, since it essentially programmatically presses the window's "maximize" button.]=],
+["love.window.minimize"] = [=[minimize() - Minimizes the window to the system's task bar / dock.]=],
+["love.window.requestAttention"] = [=[requestAttention(continuous) - Causes the window to request the attention of the user if it is not in the foreground.
+
+In Windows the taskbar icon will flash, and in OS X the dock icon will bounce.]=],
+["love.window.setDisplaySleepEnabled"] = [=[setDisplaySleepEnabled(enable) - Sets whether the display is allowed to sleep while the program is running.
+
+Display sleep is disabled by default. Some types of input (e.g. joystick button presses) might not prevent the display from sleeping, if display sleep is allowed.]=],
+["love.window.setFullscreen"] = [=[setFullscreen(fullscreen) - Enters or exits fullscreen. The display to use when entering fullscreen is chosen based on which display the window is currently in, if multiple monitors are connected.
+
+If fullscreen mode is entered and the window size doesn't match one of the monitor's display modes (in normal fullscreen mode) or the window size doesn't match the desktop size (in 'desktop' fullscreen mode), the window will be resized appropriately. The window will revert back to its original size again when fullscreen mode is exited using this function.]=],
+["love.window.setIcon"] = [=[setIcon(imagedata) - Sets the window icon until the game is quit. Not all operating systems support very large icon images.]=],
+["love.window.setMode"] = [=[setMode(width, height, flags) - Sets the display mode and properties of the window.
+
+If width or height is 0, setMode will use the width and height of the desktop.
+
+Changing the display mode may have side effects: for example, canvases will be cleared and values sent to shaders with Shader:send will be erased. Make sure to save the contents of canvases beforehand or re-draw to them afterward if you need to.]=],
+["love.window.setPosition"] = [=[setPosition(x, y, display) - Sets the position of the window on the screen.
+
+The window position is in the coordinate space of the specified display.]=],
+["love.window.setTitle"] = [=[setTitle(title) - Sets the window title.]=],
+["love.window.showMessageBox"] = [=[showMessageBox(title, message, type, attachtowindow) - Displays a message box dialog above the love window. The message box contains a title, optional text, and buttons.]=],
+["love.window.toPixels"] = [=[toPixels(value) - Converts a number from density-independent units to pixels.
+
+The pixel density inside the window might be greater (or smaller) than the "size" of the window. For example on a retina screen in Mac OS X with the highdpi window flag enabled, the window may take up the same physical size as an 800x600 window, but the area inside the window uses 1600x1200 pixels. love.window.toPixels(800) would return 1600 in that case.
+
+This is used to convert coordinates from the size users are expecting them to display at onscreen to pixels. love.window.fromPixels does the opposite. The highdpi window flag must be enabled to use the full pixel density of a Retina screen on Mac OS X and iOS. The flag currently does nothing on Windows and Linux, and on Android it is effectively always enabled.
+
+Most LÖVE functions return values and expect arguments in terms of pixels rather than density-independent units.]=],
+}

@@ -1,0 +1,243 @@
+local BASE_URL = "https://love2d.org"
+
+--- Quickhelp Documentation (ctrl-J)
+-- This is called when the user invokes quick help via ctrl-j, or by
+-- having the quickhelp panel open and set to autolookup
+-- @param name The name to get documentation for.
+-- @return the documentation as an HTML or plain text string
+function getDocumentation(name)
+    -- Use for development
+    -- disableCache()
+
+    local data = fetchURL(getDocumentationUrl(name))
+
+    local contentTag = [[<div id="bodyContent">]]
+    local footerTag = [[<div class="printfooter]]
+
+    local contentPos = data:find(contentTag)
+    local footerPos = data:find(footerTag)
+
+    if contentPos == nil then
+        return "<html><h3>" .. name .. "</h3>Could not load from Love wiki.<br><br><b>[data from love2d.org]</b></html>"
+    end
+
+    data = data:sub(contentPos, footerPos)
+
+    data =  data:gsub([[href="]], [[href="]]..BASE_URL)
+    data =  data:gsub([[src="]], [[src="]]..BASE_URL)
+
+    data = "<html><h3>" .. name .. "</h3>" .. data .. "<br><br><b>[data from love2d.org]</b></html>"
+
+    return data
+end
+
+--- External Documentation URL (shift-F1)
+-- This is called by shift-F1 on the symbol, or by the
+-- external documentation button on the quick help panel
+-- @param name The name to get documentation for.
+-- @return the URL of the external documentation
+function getDocumentationUrl(name)
+    return BASE_URL .. "/wiki/" .. name
+end
+
+
+--- Quick Navigation Tooltip Text, (ctrl-hover on symbol)
+-- This is called when the user ctrl-hovers over a symbol
+-- @param name The name to get documentation for.
+-- @return the documentation as a plain text string
+function getQuickNavigateDocumentation(name)
+    local sig = SIGNATURES[name]
+    if not sig then return name end
+    return SIGNATURES[name]
+end
+
+
+SIGNATURES = {
+["love.graphics"] = [=[love.graphics - The primary responsibility for the love.graphics module is the drawing of lines, shapes, text, Images and other Drawable objects onto the screen. Its secondary responsibilities include loading external files (including Images and Fonts) into memory, creating specialized objects (such as ParticleSystems or Framebuffers) and managing screen geometry.
+
+LÖVE's coordinate system is rooted in the upper-left corner of the screen, which is at location (0, 0). The x-axis is horizontal: larger values are further to the right. The y-axis is vertical: larger values are further towards the bottom.
+
+In many cases, you draw images or shapes in terms of their upper-left corner (See the picture above).
+
+Many of the functions are used to manipulate the graphics coordinate system, which is essentially the way coordinates are mapped to the display. You can change the position, scale, and even rotation in this way.]=],
+["love.graphics.arc"] = [=[arc(drawmode, x, y, radius, angle1, angle2, segments) - Draws a filled or unfilled arc at position (x, y). The arc is drawn from angle1 to angle2 in radians. The segments parameter determines how many segments are used to draw the arc. The more segments, the smoother the edge.]=],
+["love.graphics.circle"] = [=[circle(mode, x, y, radius) - Draws a circle.]=],
+["love.graphics.clear"] = [=[clear() - Clears the screen to the background color in LÖVE 0.9.2 and earlier, or to the specified color in 0.10.0 and newer.
+
+This function is called automatically before love.draw in the default love.run function. See the example in love.run for a typical use of this function.
+
+Note that the scissor area bounds the cleared region.]=],
+["love.graphics.discard"] = [=[discard(discardcolor, discardstencil) - Discards (trashes) the contents of the screen or active Canvas. This is a performance optimization function with niche use cases.
+
+If the active Canvas has just been changed and the "replace" BlendMode is about to be used to draw something which covers the entire screen, calling love.graphics.discard rather than calling love.graphics.clear or doing nothing may improve performance on mobile devices.
+
+On some desktop systems this function may do nothing.]=],
+["love.graphics.draw"] = [=[draw(drawable, x, y, r, sx, sy, ox, oy, kx, ky) - Draws a Drawable object (an Image, Canvas, SpriteBatch, ParticleSystem, Mesh, or Video) on the screen with optional rotation, scaling and shearing.
+
+Objects are drawn relative to their local coordinate system. The origin is by default located at the top left corner of Image and Canvas. All scaling, shearing, and rotation arguments transform the object relative to that point. Also, the position of the origin can be specified on the screen coordinate system.
+
+It's possible to rotate an object about its center by offsetting the origin to the center. Angles must be given in radians for rotation. One can also use a negative scaling factor to flip about its centerline.
+
+Note that the offsets are applied before rotation, scaling, or shearing; scaling and shearing are applied before rotation.
+
+The right and bottom edges of the object are shifted at an angle defined by the shearing factors.]=],
+["love.graphics.ellipse"] = [=[ellipse(mode, x, y, radiusx, radiusy) - Draws an ellipse.]=],
+["love.graphics.getBackgroundColor"] = [=[getBackgroundColor() - Gets the current background color.]=],
+["love.graphics.getBlendMode"] = [=[getBlendMode() - Gets the blending mode.]=],
+["love.graphics.getCanvas"] = [=[getCanvas() - Gets the current target Canvas.]=],
+["love.graphics.getCanvasFormats"] = [=[getCanvasFormats() - Gets the available Canvas formats, and whether each is supported.]=],
+["love.graphics.getColor"] = [=[getColor() - Gets the current color.]=],
+["love.graphics.getColorMask"] = [=[getColorMask() - Gets the active color components used when drawing. Normally all 4 components are active unless love.graphics.setColorMask has been used.
+
+The color mask determines whether individual components of the colors of drawn objects will affect the color of the screen. They affect love.graphics.clear and Canvas:clear as well.]=],
+["love.graphics.getCompressedImageFormats"] = [=[getCompressedImageFormats() - Gets the available compressed image formats, and whether each is supported.]=],
+["love.graphics.getDefaultFilter"] = [=[getDefaultFilter() - Returns the default scaling filters used with Images, Canvases, and Fonts.]=],
+["love.graphics.getDimensions"] = [=[getDimensions() - Gets the width and height of the window.]=],
+["love.graphics.getFont"] = [=[getFont() - Gets the current Font object.]=],
+["love.graphics.getHeight"] = [=[getHeight() - Gets the height of the window.]=],
+["love.graphics.getLineJoin"] = [=[getLineJoin() - Gets the line join style.]=],
+["love.graphics.getLineStyle"] = [=[getLineStyle() - Gets the line style.]=],
+["love.graphics.getLineWidth"] = [=[getLineWidth() - Gets the current line width.]=],
+["love.graphics.getShader"] = [=[getShader() - Returns the current Shader. Returns nil if none is set.]=],
+["love.graphics.getStats"] = [=[getStats() - Gets performance-related rendering statistics.]=],
+["love.graphics.getStencilTest"] = [=[getStencilTest() - Gets whether stencil testing is enabled.
+
+When stencil testing is enabled, the geometry of everything that is drawn will be clipped / stencilled out based on whether it intersects with what has been previously drawn to the stencil buffer.
+
+Each Canvas has its own stencil buffer.]=],
+["love.graphics.getSupported"] = [=[getSupported() - Gets the optional graphics features and whether they're supported on the system.
+
+Some older or low-end systems don't always support all graphics features.]=],
+["love.graphics.getSystemLimits"] = [=[getSystemLimits() - Gets the system-dependent maximum values for love.graphics features.]=],
+["love.graphics.getPointSize"] = [=[getPointSize() - Gets the point size.]=],
+["love.graphics.getRendererInfo"] = [=[getRendererInfo() - Gets information about the system's video card and drivers.]=],
+["love.graphics.getScissor"] = [=[getScissor() - Gets the current scissor box.]=],
+["love.graphics.getWidth"] = [=[getWidth() - Gets the width of the window.]=],
+["love.graphics.intersectScissor"] = [=[intersectScissor(x, y, width, height) - Sets the scissor to the rectangle created by the intersection of the specified rectangle with the existing scissor. If no scissor is active yet, it behaves like love.graphics.setScissor.
+
+The scissor limits the drawing area to a specified rectangle. This affects all graphics calls, including love.graphics.clear.
+
+The dimensions of the scissor is unaffected by graphical transformations (translate, scale, ...).]=],
+["love.graphics.isGammaCorrect"] = [=[isGammaCorrect() - Gets whether gamma-correct rendering is supported and enabled. It can be enabled by setting t.gammacorrect = true in love.conf.
+
+Not all devices support gamma-correct rendering, in which case it will be automatically disabled and this function will return false. It is supported on desktop systems which have graphics cards that are capable of using OpenGL 3 / DirectX 10, and iOS devices that can use OpenGL ES 3.]=],
+["love.graphics.isWireframe"] = [=[isWireframe() - Gets whether wireframe mode is used when drawing.]=],
+["love.graphics.line"] = [=[line(x1, y1, x2, y2, ...) - Draws lines between points.]=],
+["love.graphics.newCanvas"] = [=[newCanvas(width, height, format, msaa) - Creates a new Canvas object for offscreen rendering.
+
+Antialiased Canvases have slightly higher system requirements than normal Canvases. Additionally, the supported maximum number of MSAA samples varies depending on the system. Use love.graphics.getSystemLimit to check.
+
+If the number of MSAA samples specified is greater than the maximum supported by the system, the Canvas will still be created but only using the maximum supported amount (this includes 0.)]=],
+["love.graphics.newFont"] = [=[newFont(filename, size) - Creates a new Font.]=],
+["love.graphics.newMesh"] = [=[newMesh(vertices, mode, usage) - Creates a new Mesh.
+
+Use Mesh:setTexture if the Mesh should be textured with an Image or Canvas when it's drawn.]=],
+["love.graphics.newImage"] = [=[newImage(filename) - Creates a new Image from a filepath, FileData, an ImageData, or a CompressedImageData, and optionally generates or specifies mipmaps for the image.]=],
+["love.graphics.newImageFont"] = [=[newImageFont(filename, glyphs) - Creates a new Font by loading a specifically formatted image.
+
+In versions prior to 0.9.0, LÖVE expects ISO 8859-1 encoding for the glyphs string.]=],
+["love.graphics.newParticleSystem"] = [=[newParticleSystem(texture, buffer) - Creates a new ParticleSystem.]=],
+["love.graphics.newShader"] = [=[newShader(code) - Creates a new Shader object for hardware-accelerated vertex and pixel effects. A Shader contains either vertex shader code, pixel shader code, or both.
+
+Vertex shader code must contain at least one function, named position, which is the function that will produce transformed vertex positions of drawn objects in screen-space.
+
+Pixel shader code must contain at least one function, named effect, which is the function that will produce the color which is blended onto the screen for each pixel a drawn object touches.]=],
+["love.graphics.newText"] = [=[newText(font, textstring) - Creates a new Font.]=],
+["love.graphics.newQuad"] = [=[newQuad(x, y, width, height, sw, sh) - Creates a new Quad.
+
+The purpose of a Quad is to describe the result of the following transformation on any drawable object. The object is first scaled to dimensions sw * sh. The Quad then describes the rectangular area of dimensions width * height whose upper left corner is at position (x, y) inside the scaled object.]=],
+["love.graphics.newScreenshot"] = [=[newScreenshot(copyAlpha) - Creates a screenshot and returns the image data.]=],
+["love.graphics.newSpriteBatch"] = [=[newSpriteBatch(texture, maxsprites, usage) - Creates a new SpriteBatch object.]=],
+["love.graphics.newVideo"] = [=[newVideo(filename, loadaudio) - Creates a new drawable Video. Currently only Ogg Theora video files are supported.]=],
+["love.graphics.origin"] = [=[origin() - Resets the current coordinate transformation.
+
+This function is always used to reverse any previous calls to love.graphics.rotate, love.graphics.scale, love.graphics.shear or love.graphics.translate. It returns the current transformation state to its defaults.]=],
+["love.graphics.points"] = [=[points(x, y, ...) - Draws one or more points.]=],
+["love.graphics.polygon"] = [=[polygon(mode, ...) - Draw a polygon.
+
+Following the mode argument, this function can accept multiple numeric arguments or a single table of numeric arguments. In either case the arguments are interpreted as alternating x and y coordinates of the polygon's vertices.
+
+When in fill mode, the polygon must be convex and simple or rendering artifacts may occur.]=],
+["love.graphics.pop"] = [=[pop() - Pops the current coordinate transformation from the transformation stack.
+
+This function is always used to reverse a previous push operation. It returns the current transformation state to what it was before the last preceding push. For an example, see the description of love.graphics.push.]=],
+["love.graphics.present"] = [=[present() - Displays the results of drawing operations on the screen.
+
+This function is used when writing your own love.run function. It presents all the results of your drawing operations on the screen. See the example in love.run for a typical use of this function.]=],
+["love.graphics.print"] = [=[print(text, x, y, r, sx, sy, ox, oy, kx, ky) - Draws text on screen. If no Font is set, one will be created and set (once) if needed.
+
+As of LOVE 0.7.1, when using translation and scaling functions while drawing text, this function assumes the scale occurs first. If you don't script with this in mind, the text won't be in the right position, or possibly even on screen.
+
+love.graphics.print and love.graphics.printf both suppport UTF-8 encoding. You'll also need a proper Font for special characters.]=],
+["love.graphics.printf"] = [=[printf(text, x, y, limit, align, r, sx, sy, ox, oy, kx, ky) - Draws formatted text, with word wrap and alignment.
+
+See additional notes in love.graphics.print.
+
+In version 0.9.2 and earlier, wrapping was implemented by breaking up words by spaces and putting them back together to make sure things fit nicely within the limit provided. However, due to the way this is done, extra spaces between words would end up missing when printed on the screen, and some lines could overflow past the provided wrap limit. In version 0.10.0 and newer this is no longer the case.]=],
+["love.graphics.push"] = [=[push(stack) - Copies and pushes the current coordinate transformation to the transformation stack.
+
+This function is always used to prepare for a corresponding pop operation later. It stores the current coordinate transformation state into the transformation stack and keeps it active. Later changes to the transformation can be undone by using the pop operation, which returns the coordinate transform to the state it was in before calling push.]=],
+["love.graphics.rectangle"] = [=[rectangle(mode, x, y, width, height) - Draws a rectangle.]=],
+["love.graphics.reset"] = [=[reset() - Resets the current graphics settings.
+
+Calling reset makes the current drawing color white, the current background color black, resets any active Canvas or Shader, and removes any scissor settings. It sets the BlendMode to alpha. It also sets both the point and line drawing modes to smooth and their sizes to 1.0.]=],
+["love.graphics.rotate"] = [=[rotate(angle) - Rotates the coordinate system in two dimensions.
+
+Calling this function affects all future drawing operations by rotating the coordinate system around the origin by the given amount of radians. This change lasts until love.draw exits.]=],
+["love.graphics.scale"] = [=[scale(sx, sy) - Scales the coordinate system in two dimensions.
+
+By default the coordinate system in LÖVE corresponds to the display pixels in horizontal and vertical directions one-to-one, and the x-axis increases towards the right while the y-axis increases downwards. Scaling the coordinate system changes this relation.
+
+After scaling by sx and sy, all coordinates are treated as if they were multiplied by sx and sy. Every result of a drawing operation is also correspondingly scaled, so scaling by (2, 2) for example would mean making everything twice as large in both x- and y-directions. Scaling by a negative value flips the coordinate system in the corresponding direction, which also means everything will be drawn flipped or upside down, or both. Scaling by zero is not a useful operation.
+
+Scale and translate are not commutative operations, therefore, calling them in different orders will change the outcome.
+
+Scaling lasts until love.draw exits.]=],
+["love.graphics.setBackgroundColor"] = [=[setBackgroundColor(r, g, b, a) - Sets the background color.]=],
+["love.graphics.setBlendMode"] = [=[setBlendMode(mode) - Sets the blending mode.]=],
+["love.graphics.setCanvas"] = [=[setCanvas(canvas, ...) - Captures drawing operations to a Canvas.]=],
+["love.graphics.setColor"] = [=[setColor(red, green, blue, alpha) - Sets the color used for drawing.]=],
+["love.graphics.setColorMask"] = [=[setColorMask(red, green, blue, alpha) - Sets the color mask. Enables or disables specific color components when rendering and clearing the screen. For example, if red is set to false, no further changes will be made to the red component of any pixels.
+
+Enables all color components when called without arguments.]=],
+["love.graphics.setDefaultFilter"] = [=[setDefaultFilter(min, mag, anisotropy) - Sets the default scaling filters used with Images, Canvases, and Fonts.
+
+This function does not apply retroactively to loaded images.]=],
+["love.graphics.setFont"] = [=[setFont(font) - Set an already-loaded Font as the current font or create and load a new one from the file and size.
+
+It's recommended that Font objects are created with love.graphics.newFont in the loading stage and then passed to this function in the drawing stage.]=],
+["love.graphics.setLineJoin"] = [=[setLineJoin(join) - Sets the line join style.]=],
+["love.graphics.setLineStyle"] = [=[setLineStyle(style) - Sets the line style.]=],
+["love.graphics.setLineWidth"] = [=[setLineWidth(width) - Sets the line width.]=],
+["love.graphics.setNewFont"] = [=[setNewFont(filename, size) - Creates and sets a new font.]=],
+["love.graphics.setShader"] = [=[setShader() - Sets or resets a Shader as the current pixel effect or vertex shaders. All drawing operations until the next love.graphics.setShader will be drawn using the Shader object specified.
+
+Disables the shaders when called without arguments.]=],
+["love.graphics.setPointSize"] = [=[setPointSize(size) - Sets the point size.]=],
+["love.graphics.setScissor"] = [=[setScissor(x, y, width, height) - Sets or disables scissor.
+
+The scissor limits the drawing area to a specified rectangle. This affects all graphics calls, including love.graphics.clear.]=],
+["love.graphics.setStencilTest"] = [=[setStencilTest(comparemode, comparevalue) - Configures or disables stencil testing.
+
+When stencil testing is enabled, the geometry of everything that is drawn afterward will be clipped / stencilled out based on a comparison between the arguments of this function and the stencil value of each pixel that the geometry touches. The stencil values of pixels are affected via love.graphics.stencil.
+
+Each Canvas has its own per-pixel stencil values.]=],
+["love.graphics.setWireframe"] = [=[setWireframe(enable) - Sets whether wireframe lines will be used when drawing.
+
+Wireframe mode should only be used for debugging. The lines drawn with it enabled do not behave like regular love.graphics lines: their widths don't scale with the coordinate transformations or with love.graphics.setLineWidth, and they don't use the smooth LineStyle.]=],
+["love.graphics.shear"] = [=[shear(kx, ky) - Shears the coordinate system.]=],
+["love.graphics.stencil"] = [=[stencil(stencilfunction, action, value, keepvalues) - Draws geometry as a stencil.
+
+The geometry drawn by the supplied function sets invisible stencil values of pixels, instead of setting pixel colors. The stencil values of pixels can act like a mask / stencil - love.graphics.setStencilTest can be used afterward to determine how further rendering is affected by the stencil values in each pixel.
+
+Each Canvas has its own per-pixel stencil values. Stencil values are within the range of [0, 255].]=],
+["love.graphics.translate"] = [=[translate(dx, dy) - Translates the coordinate system in two dimensions.
+
+When this function is called with two numbers, dx, and dy, all the following drawing operations take effect as if their x and y coordinates were x+dx and y+dy.
+
+Scale and translate are not commutative operations, therefore, calling them in different orders will change the outcome.
+
+This change lasts until love.graphics.clear is called (which is called automatically before love.draw in the default love.run function), or a love.graphics.pop reverts to a previous coordinate system state.
+
+Translating using whole numbers will prevent tearing/blurring of images and fonts draw after translating.]=],
+}

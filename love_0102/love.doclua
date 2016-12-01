@@ -1,0 +1,100 @@
+local BASE_URL = "https://love2d.org"
+
+--- Quickhelp Documentation (ctrl-J)
+-- This is called when the user invokes quick help via ctrl-j, or by
+-- having the quickhelp panel open and set to autolookup
+-- @param name The name to get documentation for.
+-- @return the documentation as an HTML or plain text string
+function getDocumentation(name)
+    -- Use for development
+    -- disableCache()
+
+    local data = fetchURL(getDocumentationUrl(name))
+
+    local contentTag = [[<div id="bodyContent">]]
+    local footerTag = [[<div class="printfooter]]
+
+    local contentPos = data:find(contentTag)
+    local footerPos = data:find(footerTag)
+
+    if contentPos == nil then
+        return "<html><h3>" .. name .. "</h3>Could not load from Love wiki.<br><br><b>[data from love2d.org]</b></html>"
+    end
+
+    data = data:sub(contentPos, footerPos)
+
+    data =  data:gsub([[href="]], [[href="]]..BASE_URL)
+    data =  data:gsub([[src="]], [[src="]]..BASE_URL)
+
+    data = "<html><h3>" .. name .. "</h3>" .. data .. "<br><br><b>[data from love2d.org]</b></html>"
+
+    return data
+end
+
+--- External Documentation URL (shift-F1)
+-- This is called by shift-F1 on the symbol, or by the
+-- external documentation button on the quick help panel
+-- @param name The name to get documentation for.
+-- @return the URL of the external documentation
+function getDocumentationUrl(name)
+    return BASE_URL .. "/wiki/" .. name
+end
+
+
+--- Quick Navigation Tooltip Text, (ctrl-hover on symbol)
+-- This is called when the user ctrl-hovers over a symbol
+-- @param name The name to get documentation for.
+-- @return the documentation as a plain text string
+function getQuickNavigateDocumentation(name)
+    local sig = SIGNATURES[name]
+    if not sig then return name end
+    return SIGNATURES[name]
+end
+
+
+SIGNATURES = {
+["love.conf"] = [=[conf(t) - If a file called conf.lua is present in your game folder (or .love file), it is run before the LÖVE modules are loaded. You can use this file to overwrite the love.conf function, which is later called by the LÖVE 'boot' script. Using the love.conf function, you can set some configuration options, and change things like the default size of the window, which modules are loaded, and other stuff.]=],
+["love.directorydropped"] = [=[directorydropped(path) - Callback function triggered when a directory is dragged and dropped onto the window.]=],
+["love.draw"] = [=[draw() - Callback function used to draw on the screen every frame.]=],
+["love.errhand"] = [=[errhand(msg) - The error handler, used to display error messages.]=],
+["love.filedropped"] = [=[filedropped(file) - Callback function triggered when a file is dragged and dropped onto the window.]=],
+["love.focus"] = [=[focus(focus) - Callback function triggered when window receives or loses focus.]=],
+["love.gamepadaxis"] = [=[gamepadaxis(joystick, axis) - Called when a Joystick's virtual gamepad axis is moved.]=],
+["love.gamepadpressed"] = [=[gamepadpressed(joystick, button) - Called when a Joystick's virtual gamepad button is pressed.]=],
+["love.gamepadreleased"] = [=[gamepadreleased(joystick, button) - Called when a Joystick's virtual gamepad button is released.]=],
+["love.joystickadded"] = [=[joystickadded(joystick) - Called when a Joystick is connected.
+
+This callback is also triggered after love.load for every Joystick which was already connected when the game started up.]=],
+["love.joystickaxis"] = [=[joystickaxis(joystick, axis, value) - Called when a joystick axis moves.]=],
+["love.joystickhat"] = [=[joystickhat(joystick, hat, direction) - Called when a joystick hat direction changes.]=],
+["love.joystickpressed"] = [=[joystickpressed(joystick, button) - Called when a joystick button is pressed.]=],
+["love.joystickreleased"] = [=[joystickreleased(joystick, button) - Called when a joystick button is released.]=],
+["love.joystickremoved"] = [=[joystickremoved(joystick) - Called when a Joystick is disconnected.]=],
+["love.keypressed"] = [=[keypressed(key, scancode, isrepeat) - Callback function triggered when a key is pressed.]=],
+["love.keyreleased"] = [=[keyreleased(key) - Callback function triggered when a keyboard key is released.]=],
+["love.load"] = [=[load(arg) - This function is called exactly once at the beginning of the game.]=],
+["love.lowmemory"] = [=[lowmemory() - Callback function triggered when the system is running out of memory on mobile devices.
+
+ Mobile operating systems may forcefully kill the game if it uses too much memory, so any non-critical resource should be removed if possible (by setting all variables referencing the resources to nil, and calling collectgarbage()), when this event is triggered. Sounds and images in particular tend to use the most memory.]=],
+["love.mousefocus"] = [=[mousefocus(focus) - Callback function triggered when window receives or loses mouse focus.]=],
+["love.mousemoved"] = [=[mousemoved(x, y, dx, dy, istouch) - Callback function triggered when the mouse is moved.]=],
+["love.mousepressed"] = [=[mousepressed(x, y, button, isTouch) - Callback function triggered when a mouse button is pressed.]=],
+["love.mousereleased"] = [=[mousereleased(x, y, button, isTouch) - Callback function triggered when a mouse button is released.]=],
+["love.quit"] = [=[quit() - Callback function triggered when the game is closed.]=],
+["love.resize"] = [=[resize(w, h) - Called when the window is resized, for example if the user resizes the window, or if love.window.setMode is called with an unsupported width or height in fullscreen and the window chooses the closest appropriate size.
+
+Calls to love.window.setMode will only trigger this event if the width or height of the window after the call doesn't match the requested width and height. This can happen if a fullscreen mode is requested which doesn't match any supported mode, or if the fullscreen type is 'desktop' and the requested width or height don't match the desktop resolution.]=],
+["love.run"] = [=[run() - The main function, containing the main loop. A sensible default is used when left out.]=],
+["love.textedited"] = [=[textedited(text, start, length) - Called when the candidate text for an IME (Input Method Editor) has changed.
+
+The candidate text is not the final text that the user will eventually choose. Use love.textinput for that.]=],
+["love.textinput"] = [=[textinput(text) - Called when text has been entered by the user. For example if shift-2 is pressed on an American keyboard layout, the text "@" will be generated.]=],
+["love.threaderror"] = [=[threaderror(thread, errorstr) - Callback function triggered when a Thread encounters an error.]=],
+["love.touchmoved"] = [=[touchmoved(id, x, y, dx, dy, pressure) - Callback function triggered when a touch press moves inside the touch screen.]=],
+["love.touchpressed"] = [=[touchpressed(id, x, y, dx, dy, pressure) - Callback function triggered when the touch screen is touched.]=],
+["love.touchreleased"] = [=[touchreleased(id, x, y, dx, dy, pressure) - Callback function triggered when the touch screen stops being touched.]=],
+["love.update"] = [=[update(dt) - Callback function used to update the state of the game every frame.]=],
+["love.visible"] = [=[visible(visible) - Callback function triggered when window is minimized/hidden or unminimized by the user.]=],
+["love.wheelmoved"] = [=[wheelmoved(x, y) - Callback function triggered when the mouse wheel is moved.]=],
+["love.getVersion"] = [=[getVersion() - Gets the current running version of LÖVE.]=],
+}

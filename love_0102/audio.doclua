@@ -1,0 +1,76 @@
+local BASE_URL = "https://love2d.org"
+
+--- Quickhelp Documentation (ctrl-J)
+-- This is called when the user invokes quick help via ctrl-j, or by
+-- having the quickhelp panel open and set to autolookup
+-- @param name The name to get documentation for.
+-- @return the documentation as an HTML or plain text string
+function getDocumentation(name)
+    -- Use for development
+    -- disableCache()
+
+    local data = fetchURL(getDocumentationUrl(name))
+
+    local contentTag = [[<div id="bodyContent">]]
+    local footerTag = [[<div class="printfooter]]
+
+    local contentPos = data:find(contentTag)
+    local footerPos = data:find(footerTag)
+
+    if contentPos == nil then
+        return "<html><h3>" .. name .. "</h3>Could not load from Love wiki.<br><br><b>[data from love2d.org]</b></html>"
+    end
+
+    data = data:sub(contentPos, footerPos)
+
+    data =  data:gsub([[href="]], [[href="]]..BASE_URL)
+    data =  data:gsub([[src="]], [[src="]]..BASE_URL)
+
+    data = "<html><h3>" .. name .. "</h3>" .. data .. "<br><br><b>[data from love2d.org]</b></html>"
+
+    return data
+end
+
+--- External Documentation URL (shift-F1)
+-- This is called by shift-F1 on the symbol, or by the
+-- external documentation button on the quick help panel
+-- @param name The name to get documentation for.
+-- @return the URL of the external documentation
+function getDocumentationUrl(name)
+    return BASE_URL .. "/wiki/" .. name
+end
+
+
+--- Quick Navigation Tooltip Text, (ctrl-hover on symbol)
+-- This is called when the user ctrl-hovers over a symbol
+-- @param name The name to get documentation for.
+-- @return the documentation as a plain text string
+function getQuickNavigateDocumentation(name)
+    local sig = SIGNATURES[name]
+    if not sig then return name end
+    return SIGNATURES[name]
+end
+
+
+SIGNATURES = {
+["love.audio"] = [=[love.audio - Provides an interface to create noise with the user's speakers.]=],
+["love.audio.getDistanceModel"] = [=[getDistanceModel() - Returns the distance attenuation model.]=],
+["love.audio.getDopplerScale"] = [=[getDopplerScale() - Gets the current global scale factor for velocity-based doppler effects.]=],
+["love.audio.getSourceCount"] = [=[getSourceCount() - Returns the number of sources which are currently playing or paused.]=],
+["love.audio.getOrientation"] = [=[getOrientation() - Returns the orientation of the listener.]=],
+["love.audio.getPosition"] = [=[getPosition() - Returns the position of the listener.]=],
+["love.audio.getVelocity"] = [=[getVelocity() - Returns the velocity of the listener.]=],
+["love.audio.getVolume"] = [=[getVolume() - Returns the master volume.]=],
+["love.audio.newSource"] = [=[newSource(filename, type) - Creates a new Source from a file or SoundData. Sources created from SoundData are always static.]=],
+["love.audio.pause"] = [=[pause() - Pauses currently played Sources.]=],
+["love.audio.play"] = [=[play(source) - Plays the specified Source.]=],
+["love.audio.resume"] = [=[resume() - Resumes all audio]=],
+["love.audio.rewind"] = [=[rewind() - Rewinds all playing audio.]=],
+["love.audio.setDistanceModel"] = [=[setDistanceModel(model) - Sets the distance attenuation model.]=],
+["love.audio.setDopplerScale"] = [=[setDopplerScale(scale) - Sets a global scale factor for velocity-based doppler effects. The default scale value is 1.]=],
+["love.audio.setOrientation"] = [=[setOrientation(fx, fy, fz, ux, uy, uz) - Sets the orientation of the listener.]=],
+["love.audio.setPosition"] = [=[setPosition(x, y, z) - Sets the position of the listener, which determines how sounds play.]=],
+["love.audio.setVelocity"] = [=[setVelocity(x, y, z) - Sets the velocity of the listener.]=],
+["love.audio.setVolume"] = [=[setVolume(volume) - Sets the master volume.]=],
+["love.audio.stop"] = [=[stop() - Stops currently played sources.]=],
+}

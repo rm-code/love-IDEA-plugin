@@ -1,0 +1,113 @@
+local BASE_URL = "https://love2d.org"
+
+--- Quickhelp Documentation (ctrl-J)
+-- This is called when the user invokes quick help via ctrl-j, or by
+-- having the quickhelp panel open and set to autolookup
+-- @param name The name to get documentation for.
+-- @return the documentation as an HTML or plain text string
+function getDocumentation(name)
+    -- Use for development
+    -- disableCache()
+
+    local data = fetchURL(getDocumentationUrl(name))
+
+    local contentTag = [[<div id="bodyContent">]]
+    local footerTag = [[<div class="printfooter]]
+
+    local contentPos = data:find(contentTag)
+    local footerPos = data:find(footerTag)
+
+    if contentPos == nil then
+        return "<html><h3>" .. name .. "</h3>Could not load from Love wiki.<br><br><b>[data from love2d.org]</b></html>"
+    end
+
+    data = data:sub(contentPos, footerPos)
+
+    data =  data:gsub([[href="]], [[href="]]..BASE_URL)
+    data =  data:gsub([[src="]], [[src="]]..BASE_URL)
+
+    data = "<html><h3>" .. name .. "</h3>" .. data .. "<br><br><b>[data from love2d.org]</b></html>"
+
+    return data
+end
+
+--- External Documentation URL (shift-F1)
+-- This is called by shift-F1 on the symbol, or by the
+-- external documentation button on the quick help panel
+-- @param name The name to get documentation for.
+-- @return the URL of the external documentation
+function getDocumentationUrl(name)
+    return BASE_URL .. "/wiki/" .. name
+end
+
+
+--- Quick Navigation Tooltip Text, (ctrl-hover on symbol)
+-- This is called when the user ctrl-hovers over a symbol
+-- @param name The name to get documentation for.
+-- @return the documentation as a plain text string
+function getQuickNavigateDocumentation(name)
+    local sig = SIGNATURES[name]
+    if not sig then return name end
+    return SIGNATURES[name]
+end
+
+
+SIGNATURES = {
+["love.filesystem"] = [=[love.filesystem - Provides an interface to the user's filesystem.]=],
+["love.filesystem.append"] = [=[append(name, data, size) - Append data to an existing file.]=],
+["love.filesystem.areSymlinksEnabled"] = [=[areSymlinksEnabled() - Gets whether love.filesystem follows symbolic links.]=],
+["love.filesystem.createDirectory"] = [=[createDirectory(name) - Creates a directory.]=],
+["love.filesystem.exists"] = [=[exists(filename) - Check whether a file or directory exists.]=],
+["love.filesystem.getAppdataDirectory"] = [=[getAppdataDirectory() - Returns the application data directory (could be the same as getUserDirectory)]=],
+["love.filesystem.getDirectoryItems"] = [=[getDirectoryItems(dir) - Returns a table with the names of files and subdirectories in the specified path. The table is not sorted in any way; the order is undefined.
+
+If the path passed to the function exists in the game and the save directory, it will list the files and directories from both places.]=],
+["love.filesystem.getIdentity"] = [=[getIdentity(name) - Gets the write directory name for your game. Note that this only returns the name of the folder to store your files in, not the full location.]=],
+["love.filesystem.getLastModified"] = [=[getLastModified(filename) - Gets the last modification time of a file.]=],
+["love.filesystem.getRealDirectory"] = [=[getRealDirectory(filepath) - Gets the platform-specific absolute path of the directory containing a filepath.
+
+This can be used to determine whether a file is inside the save directory or the game's source .love.]=],
+["love.filesystem.getRequirePath"] = [=[getRequirePath() - Gets the filesystem paths that will be searched when require is called.
+
+The paths string returned by this function is a sequence of path templates separated by semicolons. The argument passed to require will be inserted in place of any question mark ("?") character in each template (after the dot characters in the argument passed to require are replaced by directory separators.)
+
+The paths are relative to the game's source and save directories, as well as any paths mounted with love.filesystem.mount.]=],
+["love.filesystem.getSaveDirectory"] = [=[getSaveDirectory() - Gets the full path to the designated save directory. This can be useful if you want to use the standard io library (or something else) to read or write in the save directory.]=],
+["love.filesystem.getSize"] = [=[getSize(filename) - Gets the size in bytes of a file.]=],
+["love.filesystem.getSource"] = [=[getSource() - Returns the full path to the the .love file or directory. If the game is fused to the LÖVE executable, then the executable is returned.]=],
+["love.filesystem.getSourceBaseDirectory"] = [=[getSourceBaseDirectory() - Returns the full path to the directory containing the .love file. If the game is fused to the LÖVE executable, then the directory containing the executable is returned.
+
+If love.filesystem.isFused is true, the path returned by this function can be passed to love.filesystem.mount, which will make the directory containing the main game readable by love.filesystem.]=],
+["love.filesystem.getUserDirectory"] = [=[getUserDirectory() - Returns the path of the user's directory.]=],
+["love.filesystem.getWorkingDirectory"] = [=[getWorkingDirectory() - Gets the current working directory.]=],
+["love.filesystem.init"] = [=[init(appname) - Initializes love.filesystem, will be called internally, so should not be used explicitly.]=],
+["love.filesystem.isDirectory"] = [=[isDirectory(path) - Check whether something is a directory.]=],
+["love.filesystem.isFile"] = [=[isFile(path) - Check whether something is a file.]=],
+["love.filesystem.isFused"] = [=[isFused() - Gets whether the game is in fused mode or not.
+
+If a game is in fused mode, its save directory will be directly in the Appdata directory instead of Appdata/LOVE/. The game will also be able to load C Lua dynamic libraries which are located in the save directory.
+
+A game is in fused mode if the source .love has been fused to the executable (see Game Distribution), or if "--fused" has been given as a command-line argument when starting the game.]=],
+["love.filesystem.isSymlink"] = [=[isSymlink(path) - Gets whether a filepath is actually a symbolic link.
+
+If symbolic links are not enabled (via love.filesystem.setSymlinksEnabled), this function will always return false.]=],
+["love.filesystem.lines"] = [=[lines(name) - Iterate over the lines in a file.]=],
+["love.filesystem.load"] = [=[load(name, errormsg) - Loads a Lua file (but does not run it).]=],
+["love.filesystem.mount"] = [=[mount(archive, mountpoint) - Mounts a zip file or folder in the game's save directory for reading.]=],
+["love.filesystem.newFile"] = [=[newFile(filename, mode) - Creates a new File object. It needs to be opened before it can be accessed.]=],
+["love.filesystem.newFileData"] = [=[newFileData(contents, name, decoder) - Creates a new FileData object.]=],
+["love.filesystem.read"] = [=[read(name, bytes) - Read the contents of a file.]=],
+["love.filesystem.remove"] = [=[remove(name) - Removes a file or directory.]=],
+["love.filesystem.setIdentity"] = [=[setIdentity(name, appendToPath) - Sets the write directory for your game. Note that you can only set the name of the folder to store your files in, not the location.]=],
+["love.filesystem.setRequirePath"] = [=[setRequirePath(paths) - Sets the filesystem paths that will be searched when require is called.
+
+The paths string given to this function is a sequence of path templates separated by semicolons. The argument passed to require will be inserted in place of any question mark ("?") character in each template (after the dot characters in the argument passed to require are replaced by directory separators.)
+
+The paths are relative to the game's source and save directories, as well as any paths mounted with love.filesystem.mount.]=],
+["love.filesystem.setSource"] = [=[setSource(path) - Sets the source of the game, where the code is present. This function can only be called once, and is normally automatically done by LÖVE.]=],
+["love.filesystem.setSymlinksEnabled"] = [=[setSymlinksEnabled(enable) - Sets whether love.filesystem follows symbolic links. It is enabled by default in version 0.10.0 and newer, and disabled by default in 0.9.2.]=],
+["love.filesystem.unmount"] = [=[unmount(archive) - Unmounts a zip file or folder previously mounted for reading with love.filesystem.mount.]=],
+["love.filesystem.write"] = [=[write(name, data, size) - Write data to a file.
+
+If you are getting the error message "Could not set write directory", try setting the save directory. This is done either with love.filesystem.setIdentity or by setting the identity field in love.conf.]=],
+}
