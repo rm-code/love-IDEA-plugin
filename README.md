@@ -15,6 +15,7 @@ This plugin enables auto-complete functionality and quick documentation for func
 ## LÖVE versions
 
 The repository contains different folders for the following LÖVE versions:
+- [0.10.2](https://love2d.org/wiki/0.10.2)
 - [0.10.1](https://love2d.org/wiki/0.10.1)
 - [0.10.0](https://love2d.org/wiki/0.10.0)
 - [0.9.2](https://love2d.org/wiki/0.9.2)
