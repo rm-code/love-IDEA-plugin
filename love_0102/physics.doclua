@@ -97,7 +97,7 @@ A prismatic joint constrains two bodies to move relatively to each other on a sp
 The pulley joint simulates a pulley with an optional block and tackle. If the ratio parameter has a value different from one, then the simulated rope extends faster on one side than the other. In a pulley joint the total length of the simulated rope is the constant length1 + ratio * length2, which is set when the pulley joint is created.
 
 Pulley joints can behave unpredictably if one side is fully extended. It is recommended that the method setMaxLengths  be used to constrain the maximum lengths each side can attain.]=],
-["love.physics.newRectangleShape"] = [=[newRectangleShape(width, height) - Shorthand for creating rectangluar PolygonShapes.
+["love.physics.newRectangleShape"] = [=[newRectangleShape(width, height) - Shorthand for creating rectangular PolygonShapes.
 
 By default, the local origin is located at the center of the rectangle as opposed to the top left for graphics.]=],
 ["love.physics.newRevoluteJoint"] = [=[newRevoluteJoint(body1, body2, x, y, collideConnected) - Creates a pivot joint between two bodies.
