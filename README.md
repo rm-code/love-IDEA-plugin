@@ -1,5 +1,5 @@
 # love-IDEA-plugin
-A [LÖVE](http://love2d.org)-Plugin for [IntelliJ IDEA](http://www.jetbrains.com/idea/).
+A [LÖVE](http://love2d.org)-Plugin for [IntelliJ IDEA](http://www.jetbrains.com/idea/) and [PHPStorm](https://www.jetbrains.com/phpstorm/).
 
 ![example](https://raw.githubusercontent.com/rm-code/love-IDEA-plugin/master/screenshots/preview.png)
 
@@ -23,12 +23,13 @@ The repository contains different folders for the following LÖVE versions:
 
 ##Prerequisites
 
-- [IntelliJ IDEA](http://www.jetbrains.com/idea/)
+- [IntelliJ IDEA](http://www.jetbrains.com/idea/) or [PHPStorm](https://www.jetbrains.com/phpstorm/)
 - [Lua Plugin for IntelliJ Idea](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Home)
 - This Plugin
 
 ## Installing the Plugin
 
+### IntelliJ-IDEA
 1. Open a Project in IntelliJ IDEA
 2. Open __File__ > __Project Structure__
 3. Select __Libraries__ (under Project Settings) or __Global Libraries__ (under Platform Settings)
@@ -38,6 +39,10 @@ The repository contains different folders for the following LÖVE versions:
 7. Select __Apply__ and __OK__
 
 If you run into problems you can find additional instructions [here](https://www.jetbrains.com/idea/help/configuring-module-dependencies-and-libraries.html) and [here](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Installing_a_Custom_API). There's also a great tutorial [available on youtube](https://www.youtube.com/watch?v=pw7WU-hnU0g).
+
+### PHPStorm
+You can also use the library with PHPStorm:
+![scr](https://cloud.githubusercontent.com/assets/5689499/23850658/a3f72b54-07e0-11e7-8832-6c514d91ba87.png)
 
 ## License
 
