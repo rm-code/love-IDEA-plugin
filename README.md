@@ -21,7 +21,7 @@ The repository contains different folders for the following LÖVE versions:
 - [0.9.2](https://love2d.org/wiki/0.9.2)
 - [0.9.1](https://love2d.org/wiki/0.9.1)
 
-##Prerequisites
+## Prerequisites
 
 - [IntelliJ IDEA](http://www.jetbrains.com/idea/) or [PHPStorm](https://www.jetbrains.com/phpstorm/)
 - [Lua Plugin for IntelliJ Idea](https://bitbucket.org/sylvanaar2/lua-for-idea/wiki/Home)
