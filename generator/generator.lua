@@ -179,7 +179,7 @@ function generate2()
 
         local function writeParam(prefix, tb, args)
             for _, a in ipairs(tb) do
-                local typeName = checkType(a.name)
+                local typeName = checkType(a.type)
                 if a.table then
                     typeName = "table_" .. (m.name or 'love') .. '_' .. a.name
                     types[typeName] = a.table
@@ -199,14 +199,21 @@ function generate2()
                 writeParam('param', variant.arguments, args)
             end
             if variant.returns then
-                writeParam('return', variant.returns)
+                for _, a in ipairs(variant.returns) do
+                    local typeName = checkType(a.type)
+                    if a.table then
+                        typeName = "table_" .. (m.name or 'love') .. '_' .. a.name
+                        types[typeName] = a.table
+                    end
+                    writeLine("---@return " .. typeName .. ' @' .. a.name .. ' \n---' .. a.description:gsub('\n', '\n--- ') .. '')
+                end
             end
             writeLine('function ' .. (m.name or 'love') .. (isType and ':' or '.') .. f.name .. '(' .. table.concat(args, ', ') .. ') end')
         end
         for k, v in pairs(types) do
             writeLine("---@class " .. k)
             for i, a in ipairs(v) do
-                local typeName = a.type
+                local typeName = checkType(a.type)
                 if (a.table) then
                     typeName = k .. '_' .. a.name
                     types[typeName] = a.table
