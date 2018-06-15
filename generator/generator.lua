@@ -75,7 +75,6 @@ local function generate()
     local sourceFile = openFile('love.lua')
     local docFile = openFile('love.doclua')
 
-    -- docFile2:write("love = {}\r\n")
     sourceFile:write("module('love')\r\n")
     docFile:write(DOCLUA_HEADER)
     docFile:write("SIGNATURES = {\r\n")
@@ -83,51 +82,36 @@ local function generate()
     for _, f in ipairs(api.callbacks) do
         sourceFile:write('function ' .. f.name .. '() end\r\n')
 
-        --docFile2:write('---[Callback]\n---' .. f.description:gsub('\n', '\n--- ') .. '\r\n')
-        -- Find the args of the first variant
         local args = {}
         local variant = f.variants[1]
         if variant.arguments then
             for _, a in ipairs(variant.arguments) do
-                --docFile2:write("---@param " .. a.name .. ' ' .. a.type .. ' @' .. a.description:gsub('\n', '\n--- ') .. '\r\n')
                 table.insert(args, a.name)
             end
         end
 
         docFile:write('["love.' .. f.name .. '"] = [=[' .. f.name .. '(' .. table.concat(args, ', ') .. ') - ' .. f.description .. ']=],\r\n')
-        --docFile2:write('function love.' .. f.name .. '(' .. table.concat(args, ', ') .. ') end\r\n')
     end
 
     for _, f in ipairs(api.functions) do
         sourceFile:write('function ' .. f.name .. '() end\r\n')
-
-        -- Find the args of the first variant
         local args = {}
         local variant = f.variants[1]
 
-        --docFile2:write('--- ' .. f.description:gsub('\n', '\n--- ') .. '\r\n')
         if variant.arguments then
             for _, a in ipairs(variant.arguments) do
-                --docFile2:write("---@param " .. a.name .. ' ' .. a.type .. ' @' .. a.description:gsub('\n', '\n--- ') .. '\r\n')
                 table.insert(args, a.name)
             end
         end
 
         docFile:write('["love.' .. f.name .. '"] = [=[' .. f.name .. '(' .. table.concat(args, ', ') .. ') - ' .. f.description .. ']=],\r\n')
-        --docFile2:write('function love.' .. f.name .. '(' .. table.concat(args, ', ') .. ') end\r\n')
     end
 
     docFile:write('}\r\n');
 
     for _, m in ipairs(api.modules) do
-        -- Create new files for each module.
         sourceFile = openFile(m.name .. '.lua')
         docFile = openFile(m.name .. '.doclua')
-
-        --docFile2:write("---@class _" .. m.name .. '\r\n')
-        -- docFile2:write("local  "..m.name..' = {}\r\n')
-        --docFile2:write("---@type _" .. m.name .. '\r\n')
-        --docFile2:write("love." .. m.name .. ' = {}\r\n')
 
         sourceFile:write("module('love." .. m.name .. "')\r\n\n")
 
@@ -137,20 +121,16 @@ local function generate()
 
         for _, f in ipairs(m.functions) do
             sourceFile:write('function ' .. f.name .. '() end\r\n')
-            -- Find the args of the first variant
             local args = {}
             local variant = f.variants and f.variants[1] or {}
 
-            --docFile2:write('--- ' .. f.description:gsub('\n', '\n--- ') .. '\r\n')
             if variant.arguments then
                 for _, a in ipairs(variant.arguments) do
-                    --docFile2:write("---@param " .. a.name .. ' ' .. a.type .. ' @' .. a.description:gsub('\n', '\n--- ') .. '\r\n')
                     table.insert(args, a.name)
                 end
             end
 
             docFile:write('["love.' .. m.name .. '.' .. f.name .. '"] = [=[' .. f.name .. '(' .. table.concat(args, ', ') .. ') - ' .. f.description .. ']=],\r\n')
-            --docFile2:write('function _' .. m.name .. '.' .. f.name .. '(' .. table.concat(args, ', ') .. ') end\r\n')
         end
         docFile:write('}\r\n')
     end
@@ -220,7 +200,6 @@ function generate2()
                 end
                 writeLine('---@field public ' .. a.name .. ' ' .. typeName .. ' @' .. a.description:gsub('\n', '\n--- '))
             end
-            --writeLine('local ' .. k .. ' = {}')
             writeLine('')
             writeLine('')
         end
@@ -288,9 +267,6 @@ function generate2()
     end
 
     writeLine("---@class love")
-    --for i, v in ipairs(api.modules) do
-    --    writeLine("---@field " .. v.name .. ' ' .. checkType(v.name) .. " @" .. v.description:gsub('\n', '\n--- '))
-    --end
     writeModule(api)
 end
 
