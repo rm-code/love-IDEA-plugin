@@ -128,11 +128,15 @@ local function generate()
             sourceFile:write( 'function ' .. f.name .. '() end\r\n' )
             -- Find the args of the first variant
             local args = {}
-            local variant = f.variants[1]
 
-            if variant.arguments then
-                for _, a in ipairs( variant.arguments ) do
-                    table.insert( args, a.name )
+            -- check if functions has variants
+            if f.variants then
+                local variant = f.variants[1]
+
+                if variant.arguments then
+                    for _, a in ipairs( variant.arguments ) do
+                        table.insert( args, a.name )
+                    end
                 end
             end
 
