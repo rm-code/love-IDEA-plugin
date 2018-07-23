@@ -1,0 +1,66 @@
+local BASE_URL = "https://love2d.org"
+
+--- Quickhelp Documentation (ctrl-J)
+-- This is called when the user invokes quick help via ctrl-j, or by
+-- having the quickhelp panel open and set to autolookup
+-- @param name The name to get documentation for.
+-- @return the documentation as an HTML or plain text string
+function getDocumentation(name)
+    -- Use for development
+    -- disableCache()
+
+    local data = fetchURL(getDocumentationUrl(name))
+
+    local contentTag = [[<div id="bodyContent">]]
+    local footerTag = [[<div class="printfooter]]
+
+    local contentPos = data:find(contentTag)
+    local footerPos = data:find(footerTag)
+
+    if contentPos == nil then
+        return "<html><h3>" .. name .. "</h3>Could not load from Love wiki.<br><br><b>[data from love2d.org]</b></html>"
+    end
+
+    data = data:sub(contentPos, footerPos)
+
+    data =  data:gsub([[href="]], [[href="]]..BASE_URL)
+    data =  data:gsub([[src="]], [[src="]]..BASE_URL)
+
+    data = "<html><h3>" .. name .. "</h3>" .. data .. "<br><br><b>[data from love2d.org]</b></html>"
+
+    return data
+end
+
+--- External Documentation URL (shift-F1)
+-- This is called by shift-F1 on the symbol, or by the
+-- external documentation button on the quick help panel
+-- @param name The name to get documentation for.
+-- @return the URL of the external documentation
+function getDocumentationUrl(name)
+    return BASE_URL .. "/wiki/" .. name
+end
+
+
+--- Quick Navigation Tooltip Text, (ctrl-hover on symbol)
+-- This is called when the user ctrl-hovers over a symbol
+-- @param name The name to get documentation for.
+-- @return the documentation as a plain text string
+function getQuickNavigateDocumentation(name)
+    local sig = SIGNATURES[name]
+    if not sig then return name end
+    return SIGNATURES[name]
+end
+
+
+SIGNATURES = {
+["love.system"] = [=[love.system - Provides access to information about the user's system.]=],
+["love.system.getClipboardText"] = [=[getClipboardText() - Gets text from the clipboard.]=],
+["love.system.getOS"] = [=[getOS() - Gets the current operating system. In general, LÖVE abstracts away the need to know the current operating system, but there are a few cases where it can be useful (especially in combination with os.execute.)]=],
+["love.system.getPowerInfo"] = [=[getPowerInfo() - Gets information about the system's power supply.]=],
+["love.system.getProcessorCount"] = [=[getProcessorCount() - Gets the number of CPU cores in the system.
+
+The number includes the threads reported if technologies such as Intel's Hyper-threading are enabled. For example, on a 4-core CPU with Hyper-threading, this function will return 8.]=],
+["love.system.openURL"] = [=[openURL(url) - Opens a URL with the user's web or file browser.]=],
+["love.system.setClipboardText"] = [=[setClipboardText(text) - Puts text in the clipboard.]=],
+["love.system.vibrate"] = [=[vibrate(seconds) - Causes the device to vibrate, if possible. Currently this will only work on Android and iOS devices that have a built-in vibration motor.]=],
+}
