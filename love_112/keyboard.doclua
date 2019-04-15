@@ -1,0 +1,77 @@
+local BASE_URL = "https://love2d.org"
+
+--- Quickhelp Documentation (ctrl-J)
+-- This is called when the user invokes quick help via ctrl-j, or by
+-- having the quickhelp panel open and set to autolookup
+-- @param name The name to get documentation for.
+-- @return the documentation as an HTML or plain text string
+function getDocumentation(name)
+    -- Use for development
+    -- disableCache()
+
+    local data = fetchURL(getDocumentationUrl(name))
+
+    local contentTag = [[<div id="bodyContent">]]
+    local footerTag = [[<div class="printfooter]]
+
+    local contentPos = data:find(contentTag)
+    local footerPos = data:find(footerTag)
+
+    if contentPos == nil then
+        return "<html><h3>" .. name .. "</h3>Could not load from Love wiki.<br><br><b>[data from love2d.org]</b></html>"
+    end
+
+    data = data:sub(contentPos, footerPos)
+
+    data =  data:gsub([[href="]], [[href="]]..BASE_URL)
+    data =  data:gsub([[src="]], [[src="]]..BASE_URL)
+
+    data = "<html><h3>" .. name .. "</h3>" .. data .. "<br><br><b>[data from love2d.org]</b></html>"
+
+    return data
+end
+
+--- External Documentation URL (shift-F1)
+-- This is called by shift-F1 on the symbol, or by the
+-- external documentation button on the quick help panel
+-- @param name The name to get documentation for.
+-- @return the URL of the external documentation
+function getDocumentationUrl(name)
+    return BASE_URL .. "/wiki/" .. name
+end
+
+
+--- Quick Navigation Tooltip Text, (ctrl-hover on symbol)
+-- This is called when the user ctrl-hovers over a symbol
+-- @param name The name to get documentation for.
+-- @return the documentation as a plain text string
+function getQuickNavigateDocumentation(name)
+    local sig = SIGNATURES[name]
+    if not sig then return name end
+    return SIGNATURES[name]
+end
+
+
+SIGNATURES = {
+["love.keyboard"] = [=[love.keyboard - Provides an interface to the user's keyboard.]=],
+["love.keyboard.getKeyFromScancode"] = [=[getKeyFromScancode(scancode) - Gets the key corresponding to the given hardware scancode.
+
+Unlike key constants, Scancodes are keyboard layout-independent. For example the scancode "w" will be generated if the key in the same place as the "w" key on an American keyboard is pressed, no matter what the key is labelled or what the user's operating system settings are.
+
+Scancodes are useful for creating default controls that have the same physical locations on on all systems.]=],
+["love.keyboard.getScancodeFromKey"] = [=[getScancodeFromKey(key) - Gets the hardware scancode corresponding to the given key.
+
+Unlike key constants, Scancodes are keyboard layout-independent. For example the scancode "w" will be generated if the key in the same place as the "w" key on an American keyboard is pressed, no matter what the key is labelled or what the user's operating system settings are.
+
+Scancodes are useful for creating default controls that have the same physical locations on on all systems.]=],
+["love.keyboard.hasKeyRepeat"] = [=[hasKeyRepeat() - Gets whether key repeat is enabled.]=],
+["love.keyboard.hasTextInput"] = [=[hasTextInput() - Gets whether text input events are enabled.]=],
+["love.keyboard.isDown"] = [=[isDown(key) - Checks whether a certain key is down. Not to be confused with love.keypressed or love.keyreleased.]=],
+["love.keyboard.isScancodeDown"] = [=[isScancodeDown(scancode, ...) - Checks whether the specified Scancodes are pressed. Not to be confused with love.keypressed or love.keyreleased.
+
+Unlike regular KeyConstants, Scancodes are keyboard layout-independent. The scancode "w" is used if the key in the same place as the "w" key on an American keyboard is pressed, no matter what the key is labelled or what the user's operating system settings are.]=],
+["love.keyboard.setKeyRepeat"] = [=[setKeyRepeat(enable) - Enables or disables key repeat. It is disabled by default.
+
+The interval between repeats depends on the user's system settings.]=],
+["love.keyboard.setTextInput"] = [=[setTextInput(enable) - Enables or disables text input events. It is enabled by default on Windows, Mac, and Linux, and disabled by default on iOS and Android.]=],
+}
