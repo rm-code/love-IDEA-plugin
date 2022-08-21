@@ -1,5 +1,5 @@
 #!/bin/bash
-readonly LOVE_DIR=love_113
+readonly LOVE_DIR=love_114
 
 git clone --depth=1 https://github.com/rm-code/love-api api
 mkdir docs
