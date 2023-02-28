@@ -1,3 +1,6 @@
+> __Please note__: As of 2023 I am putting this repository into archive mode in case people still need access to it. For new people arriving here I'd recommend looking at [EmmyLua](https://github.com/EmmyLua) and the [Emmy-Love-Api](https://github.com/EmmyLua/Emmy-love-api) instead.
+> So long and thanks for all the fish!
+
 # love-IDEA-plugin
 A [LÖVE](http://love2d.org)-Plugin for [IntelliJ IDEA](http://www.jetbrains.com/idea/) and [PHPStorm](https://www.jetbrains.com/phpstorm/).
 
